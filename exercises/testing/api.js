@@ -9,15 +9,33 @@ app.use(urlencoded({extended: true}))
 app.use(json())
 
 app.get('/user/:id', async (req, res) => {
-  const id = req.id
+  debugger;
+  const id = parseInt(req.params.id);
+  console.log('id in parameter: ', id)
   // should ge user by given id in route param
-  const user = await users.findUser(user => user.id === id)
+  let user;
+  try {
+    user = await users.findUser(id)
+  }
+  catch (error) {
+    console.log('That did not go well in searching for id.')
+    console.error(error)
+    process.exit(1)
+  }
   res.status(200).send(user)
 })
 
 app.delete('/user/:id', async (req, res) => {
-  const id = req.id
-  await users.deleteUser(id)
+  debugger;
+  const id = req.params.id
+  try {
+    await users.deleteUser(id) 
+  }
+  catch (error) {
+    console.log('That did not go well in deleting the id.')
+    console.error(error)
+    process.exit(1)
+}
   res.status(201).send({id})
 })
 
